@@ -14,6 +14,7 @@ import {
 
 const TreeNode = ({ node, parentPath = "", owner, repo }) => {
   const [open, setOpen] = useState(false);
+  const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [explanation, setExplanation] = useState(""); // Cached explanation text
   const [showExplanation, setShowExplanation] = useState(false);
   const [loadingExplain, setLoadingExplain] = useState(false);
@@ -77,7 +78,12 @@ const TreeNode = ({ node, parentPath = "", owner, repo }) => {
             ? "cursor-pointer hover:bg-white/10 text-gray-200 font-medium"
             : "hover:bg-white/5 text-gray-400"
         }`}
-        onClick={() => isDir && setOpen(!open)}
+        onClick={() => {
+          if (isDir) {
+            setOpen(!open);
+            if (!hasBeenOpened) setHasBeenOpened(true);
+          }
+        }}
       >
         {/* Chevron / spacer */}
         <span className="flex shrink-0 items-center justify-center w-5 h-5 text-gray-500">
@@ -174,8 +180,8 @@ const TreeNode = ({ node, parentPath = "", owner, repo }) => {
       )}
 
       {/* Children — folders */}
-      {isDir && open && node.children && (
-        <div className="ml-5 border-l border-white/10 pl-3 mt-1 flex flex-col gap-1 relative before:absolute before:top-0 before:bottom-0 before:-left-px before:w-px before:bg-linear-to-b before:from-blue-500/20 before:to-transparent">
+      {isDir && (open || hasBeenOpened) && node.children && (
+        <div className={`ml-5 border-l border-white/10 pl-3 mt-1 flex-col gap-1 relative before:absolute before:top-0 before:bottom-0 before:-left-px before:w-px before:bg-linear-to-b before:from-blue-500/20 before:to-transparent ${open ? "flex" : "hidden"}`}>
           {node.children.map((child, index) => (
             <TreeNode key={index} node={child} parentPath={filePath} owner={owner} repo={repo} />
           ))}
