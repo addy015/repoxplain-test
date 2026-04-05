@@ -27,6 +27,10 @@ app.use(express.json());
  * Iska matlab analyze.routes.js ke saare endpoints '/api' se start honge.
  * Example: POST /api/analyze
  */
+
+// Health check endpoint — monitoring services (like UptimeRobot) ping this to keep server awake
+app.get("/", (req, res) => res.status(200).json({ status: "ok" }));
+
 app.use("/api", analyzeRoutes);
 
 // App instance ko export kar rahe hain taaki server.js isko use kar sake

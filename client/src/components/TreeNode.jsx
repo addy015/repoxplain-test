@@ -55,7 +55,8 @@ const TreeNode = ({ node, parentPath = "", owner, repo }) => {
     setIsError(false);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/explain", {
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const response = await axios.post(`${baseUrl}/api/explain`, {
         filePath,
         owner,
         repo
