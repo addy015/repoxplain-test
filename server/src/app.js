@@ -13,7 +13,14 @@ const app = express();
 
 // MIDDLEWARES SETUP
 // CORS policy enable kar rahe hain taaki frontend se cross-origin requests aa sakein
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  process.env.CLIENT_URL,  // Vercel URL (set in Render dashboard)
+].filter(Boolean);
+
+app.use(cors({
+  origin: allowedOrigins,
+}));
 
 // Incoming JSON payload ko parse karne ke liye middleware
 // Iske bina req.body undefined aayega
